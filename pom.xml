@@ -175,7 +175,7 @@
 				<configuration>
 					<suiteXmlFiles>
 						<!-- <suiteXmlFile>testng.xml</suiteXmlFile> -->
-						<suiteXmlFile>${suiteFile}</suiteXmlFile>
+						<suiteXmlFile>localChrome.xml</suiteXmlFile>
 					</suiteXmlFiles>
 					<systemPropertyVariables>
 						<testng.dtd.http>true</testng.dtd.http>
