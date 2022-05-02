@@ -13,7 +13,6 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.NotFoundException;
@@ -24,10 +23,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -41,6 +41,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
+import io.github.bonigarcia.wdm.managers.FirefoxDriverManager;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
 import onesource.reusables.CategoryLandingAction;
@@ -54,7 +55,6 @@ import onesource.reusables.ShippingBillingAction;
 import onesource.reusables.ShoppingCartAction;
 
 public class BaseTest {
-	private Logger Log = Logger.getLogger(BaseTest.class.getName());
 	public WebDriver driver;
 	public WebDriverWait wait;
 	public JavascriptExecutor js;
@@ -91,7 +91,7 @@ public class BaseTest {
 		case "android":
 			// capabilities = DesiredCapabilities.android();
 			capabilities.setCapability("deviceOrientation", prop.getProperty("android_deviceOrientation"));
-			capabilities.setCapability("deviceName", "Huawei_P30_Lite_real_us");
+			//capabilities.setCapability("deviceName", "Huawei_P30_Lite_real_us");
 			capabilities.setCapability("browserName", prop.getProperty("android_browser"));
 			capabilities.setCapability("platformVersion", androidVersion[random.nextInt(androidVersion.length)]);
 			capabilities.setCapability("platformName", prop.getProperty("android_platformname"));
@@ -169,18 +169,21 @@ public class BaseTest {
 			break;
 
 		case "localchrome":
-			ChromeDriverManager.chromedriver().setup();
+			ChromeDriverManager.chromedriver().mac().setup();
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			break;
-
+			
 		case "localsafari":
-			driver = new SafariDriver();
+			FirefoxDriverManager.firefoxdriver().linux().setup();
+			FirefoxOptions fireFoxOptions = new FirefoxOptions();
+			fireFoxOptions.addArguments("--no-sandbox");
+			fireFoxOptions.addArguments("--headless");
+			driver = new FirefoxDriver();
 			driver.manage().window().maximize();
 			break;
 
 		default:
-			Log.error("Browser Not Found. Please Provide a Valid Browser");
 			throw new NotFoundException("Browser Not Found. Please Provide a Valid Browser");
 		}
 
